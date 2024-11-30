@@ -10,12 +10,14 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.use('/api/device', require('./routes/device.route'));
-app.use('/api/pumpcontrol', require('./routes/pump.route'));
-app.use('/api/waterlevel', require('./routes/sensor.route'));
+const baseUrl = '/api';
 
-app.get('/', (req, res) => {
-    res.json({ message: 'Welcome to IoT API' });
+app.use(`${baseUrl}/device`, require('./routes/device.route'));
+app.use(`${baseUrl}/pumpcontrol`, require('./routes/pump.route'));
+app.use(`${baseUrl}/waterlevel`, require('./routes/sensor.route'));
+
+app.get(baseUrl, (req, res) => {
+    res.json({ message: 'Welcome to Pump Monitoring API' })
 });
 
 mongoose.connect(process.env.MONGODB_URL).then(() => {

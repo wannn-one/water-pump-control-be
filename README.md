@@ -2,7 +2,7 @@
 
 ## 🌐 Overview
 
-Water Pump Control Backend is a RESTful API that allows users to monitor & control water pumps. It is built using MongoDB, Express, Node.js and MQTT for communication with the IoT devices (In this case ESP32).
+Water Pump Control Backend is a RESTful API that allows users to monitor & control water pumps. It is built using MongoDB Atlas, Express, Node.js and MQTT for communication with the IoT devices (In this case ESP32).
 
 ## 🔗 Base URL
 
@@ -16,21 +16,21 @@ The base URL for the API is `http://localhost:3000/api`.
 
 #### Get All Devices
 
-- **URL:** `/devices`
+- **URL:** `/device`
 - **Method:** `GET`
 - **Description:** Get all devices
 - **Response:** Returns an array of devices
 
 #### Get Device by ID
 
-- **URL:** `/devices/:id`
+- **URL:** `/device/:id`
 - **Method:** `GET`
 - **Description:** Get a device by ID
 - **Response:** Returns a device
 
 #### Add Device
 
-- **URL:** `/devices`
+- **URL:** `/device`
 - **Method:** `POST`
 - **Description:** Add a new device
 - **Request Body:** 
@@ -48,7 +48,7 @@ The base URL for the API is `http://localhost:3000/api`.
 
 #### Update Device
 
-- **URL:** `/devices/:id`
+- **URL:** `/device/:id`
 - **Method:** `PUT`
 - **Description:** Update a device by ID
 - **Request Body:** 
@@ -65,16 +65,16 @@ The base URL for the API is `http://localhost:3000/api`.
 
 #### Delete Device
 
-- **URL:** `/devices/:id`
+- **URL:** `/device/:id`
 - **Method:** `DELETE`
 - **Description:** Delete a device by ID
 - **Response:** message: "Device deleted successfully"
 
-### Health Check
+### 🔍 Health Check
 
 #### Health Check
 
-- **URL:** `/`
+- **URL:** `/api`
 - **Method:** `GET`
 - **Description:** Health Check
 - **Response:** message: "Welcome to IoT API"
@@ -83,7 +83,7 @@ The base URL for the API is `http://localhost:3000/api`.
 
 #### Toggle Pump (ON/OFF)
 
-- **URL:** `/:pumpId/toggle`
+- **URL:** `/pumpcontrol/:pumpId/toggle`
 - **Method:** `PUT`
 - **Description:** Toggle a pump by ID
 - **Request Body:** 
@@ -97,7 +97,7 @@ The base URL for the API is `http://localhost:3000/api`.
 
 #### Mode Pump (AUTO/MANUAL)
 
-- **URL:** `/:pumpId/mode`
+- **URL:** `/pumpcontrol/:pumpId/mode`
 - **Method:** `PUT`
 - **Description:** Set a pump mode by ID
 - **Request Body:** 
@@ -111,7 +111,7 @@ The base URL for the API is `http://localhost:3000/api`.
 
 #### Pump History
 
-- **URL:** `/:pumpId/history`
+- **URL:** `/pumpcontrol/:pumpId/history`
 - **Method:** `GET`
 - **Description:** Get pump history by ID
 - **Response:** Returns an array of pump history
@@ -120,7 +120,7 @@ The base URL for the API is `http://localhost:3000/api`.
 
 #### Set Water Level Range
 
-- **URL:** `/:sensorId/setRange`
+- **URL:** `/waterlevel/:sensorId/setRange`
 - **Method:** `PUT`
 - **Description:** Set a water level range by ID
 - **Request Body:** 
@@ -135,7 +135,7 @@ The base URL for the API is `http://localhost:3000/api`.
 
 #### Water Level Update Last Read
 
-- **URL:** `/:sensorId/updateLastReading`
+- **URL:** `/waterlevel/:sensorId/updateLastReading`
 - **Method:** `PUT`
 - **Description:** Update last reading of water level by ID
 - **Request Body:** 
@@ -148,7 +148,7 @@ The base URL for the API is `http://localhost:3000/api`.
 
 #### Water Level History
 
-- **URL:** `/:sensorId/history`
+- **URL:** `/waterlevel/:sensorId/history`
 - **Method:** `GET`
 - **Description:** Get water level history by ID
 - **Response:** Returns an array of water level history
