@@ -45,7 +45,7 @@ exports.createDevice = async (req, res) => {
       timestamp: Date.now(),
     });
 
-    res.status(201).json(savedDevice);
+    res.status(201).json( { message: 'Device created successfully', device: savedDevice });
   } catch (err) {
     res.status(500).json({ message: 'Error creating device', error: err.message });
   }
@@ -65,7 +65,7 @@ exports.updateDevice = async (req, res) => {
       timestamp: Date.now(),
     });
 
-    res.status(200).json(updatedDevice);
+    res.status(200).json({message: "Device updated successfully", device: updatedDevice});
   } catch (err) {
     res.status(500).json({ message: 'Error updating device', error: err.message });
   }

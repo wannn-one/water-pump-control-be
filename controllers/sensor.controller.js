@@ -49,7 +49,7 @@ exports.setRange = async (req, res) => {
       status: `Range set to ${rangeMin} - ${rangeMax}`,
     });
 
-    res.status(200).json(sensor);
+    res.status(200).json({ message: 'Range set successfully', sensor });
 
   } catch (error) {
     res.status(500).json({ message: error.message });
