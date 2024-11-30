@@ -7,13 +7,13 @@ const DeviceSchema = new mongoose.Schema({
     unique: true,
   },
   name: {
-    type: String, // Nama perangkat (misalnya: "Sensor Air Utama")
+    type: String, // Nama perangkat (contoh: "Sensor Air Utama" atau "PLC Pompa 1")
     required: true,
   },
   type: {
-    type: String, // Jenis perangkat (misalnya: "ESP32", "PLC", "Sensor")
-    enum: ['ESP32', 'PLC', 'Sensor', 'Other'],
-    default: 'Other',
+    type: String, // Jenis perangkat
+    enum: ['ESP_WATERLEVEL', 'ESP_PLC'], // Jenis perangkat utama
+    required: true,
   },
   location: {
     type: String, // Lokasi pemasangan perangkat
@@ -21,7 +21,7 @@ const DeviceSchema = new mongoose.Schema({
   },
   status: {
     type: String, // Status perangkat: Active, Inactive, Maintenance
-    enum: ['Active', 'Inactive', 'Maintenance'],
+    enum: ['ACTIVE', 'INACTIVE', 'MAINTENANCE'], // Pilihan status perangkat
     default: 'Active',
   },
   lastOnline: {

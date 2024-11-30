@@ -11,8 +11,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.use('/api/device', require('./routes/device.route'));
-app.use('/api/pumpcontrol', require('./routes/pumpcontrol.route'));
-app.use('/api/waterlevel', require('./routes/waterlevel.route'));
+app.use('/api/pumpcontrol', require('./routes/pump.route'));
+app.use('/api/waterlevel', require('./routes/sensor.route'));
 
 app.get('/', (req, res) => {
     res.json({ message: 'Welcome to IoT API' });
