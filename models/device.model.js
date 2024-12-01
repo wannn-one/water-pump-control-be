@@ -6,10 +6,6 @@ const DeviceSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
-  name: {
-    type: String, // Nama perangkat (contoh: "Sensor Air Utama" atau "PLC Pompa 1")
-    required: true,
-  },
   type: {
     type: String, // Jenis perangkat
     enum: ['ESP_WATERLEVEL', 'ESP_PLC'], // Jenis perangkat utama

@@ -122,3 +122,29 @@ exports.getSensorHistory = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+// Fungsi untuk mengambil semua sensor
+exports.getAllSensors = async (req, res) => {
+  try {
+    const sensors = await Sensor.find();
+    res.status(200).json(sensors);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Fungsi untuk mengambil sensor berdasarkan ID
+exports.getSensorById = async (req, res) => {
+  try {
+    const sensorId = req.params.sensorId;
+    const sensor = await Sensor.findOne ({ sensorId });
+    if (!sensor) {
+      return res.status(404).json({ message: 'Sensor not found' });
+    }
+    
+    res.status(200).json(sensor);
+    
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}

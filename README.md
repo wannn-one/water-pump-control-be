@@ -45,6 +45,7 @@ The base URL for the API is `http://localhost:3000/api`.
     }
     ```
 - **Response:** message: "Device created successfully", device: {savedDevice}
+- **Note:** If the type of device is `ESP_PLC`, the device will be automatically create a pump control. If the type of device is `ESP_WATERLEVEL`, the device will be automatically create a water level sensor.
 
 #### Update Device
 
@@ -116,6 +117,33 @@ The base URL for the API is `http://localhost:3000/api`.
 - **Description:** Get pump history by ID
 - **Response:** Returns an array of pump history
 
+#### Get All Pump
+
+- **URL:** `/pumpcontrol`
+- **Method:** `GET`
+- **Description:** Get all pumps
+- **Response:** Returns an array of pumps
+
+#### Get Pump by ID
+
+- **URL:** `/pumpcontrol/:id`
+- **Method:** `GET`
+- **Description:** Get a pump by ID
+- **Response:** Returns a pump
+
+#### Set Pump Relay Pin
+
+- **URL:** `/pumpcontrol/:pumpId/setRelayPin`
+- **Method:** `PUT`
+- **Description:** Set a pump relay pin by ID
+- **Request Body:** 
+    ```json
+    {
+        "relayPin": 2 // Required
+    }
+    ```
+- **Response:** message: "Edited relay pin to ${relayPin} for pump ${pumpId}""
+
 ### 🌊 Water Levels
 
 #### Set Water Level Range
@@ -152,6 +180,20 @@ The base URL for the API is `http://localhost:3000/api`.
 - **Method:** `GET`
 - **Description:** Get water level history by ID
 - **Response:** Returns an array of water level history
+
+#### Get All Water Level Sensors
+
+- **URL:** `/waterlevel`
+- **Method:** `GET`
+- **Description:** Get all water level sensors
+- **Response:** Returns an array of water level sensors
+
+#### Get Water Level Sensor by ID
+
+- **URL:** `/waterlevel/:id`
+- **Method:** `GET`
+- **Description:** Get a water level sensor by ID
+- **Response:** Returns a water level sensor
 
 ## ⚙️ Setup Instructions
 

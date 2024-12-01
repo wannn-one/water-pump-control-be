@@ -10,4 +10,10 @@ router.put('/:sensorId/updateLastReading', sensorController.updateLastReading); 
 // Endpoint untuk mengambil riwayat log sensor
 router.get('/:sensorId/history', sensorController.getSensorHistory); // Get sensor history
 
+// Endpoint untuk mengambil semua sensor
+router.get('/', sensorController.getAllSensors); // Get all sensors
+
+// Endpoint untuk mengambil sensor berdasarkan ID
+router.get('/:sensorId', sensorController.getSensorById); // Get sensor by ID
+
 module.exports = router;

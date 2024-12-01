@@ -6,10 +6,6 @@ const SensorSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
-  name: {
-    type: String, // Nama sensor (contoh: "Sensor Level Air")
-    required: true,
-  },
   associatedDevice: {
     type: String,
     ref: 'Device',

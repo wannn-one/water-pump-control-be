@@ -20,8 +20,8 @@ async function seedDatabase() {
 
     // Seed Devices
     const devices = [
-      { deviceId: 'ESP32-01', name: 'Pump1', type: 'ESP_PLC', location: 'Room 1', status: 'INACTIVE' },
-      { deviceId: 'ESP32-02', name: 'Sensor1', type: 'ESP_WATERLEVEL', location: 'Room 2', status: 'ACTIVE' },
+      { deviceId: 'ESP32-01', type: 'ESP_PLC', location: 'Room 1', status: 'INACTIVE' },
+      { deviceId: 'ESP32-02', type: 'ESP_WATERLEVEL', location: 'Room 2', status: 'ACTIVE' },
     ];
 
     const savedDevices = await Device.insertMany(devices);
@@ -29,7 +29,11 @@ async function seedDatabase() {
 
     // Seed Sensors (misalnya terkait dengan device tertentu)
     const sensors = [
-      { sensorId: 'SENSOR-001', name: 'Water Level Sensor', associatedDevice: savedDevices[1].deviceId, status: 'ON' },
+      { 
+        sensorId: 'SENSOR-' + savedDevices[1].deviceId,
+        associatedDevice: savedDevices[1].deviceId, 
+        status: 'ON' 
+      },
     ];
 
     const savedSensors = await Sensor.insertMany(sensors);
@@ -37,7 +41,15 @@ async function seedDatabase() {
 
     // Seed Pumps (misalnya terkait dengan device tertentu)
     const pumps = [
-      { pumpId: 'PUMP-001', name: 'Water Pump', associatedDevice: savedDevices[0].deviceId, relayPin: 1, status: 'OFF', controlMode: 'MANUAL', lastAction: 'TURN_OFF', lastUpdated: Date.now() },
+      { 
+        pumpId: 'PUMP-' + savedDevices[0].deviceId, 
+        associatedDevice: savedDevices[0].deviceId, 
+        relayPin: 1, 
+        status: 'OFF', 
+        controlMode: 'MANUAL', 
+        lastAction: 'TURN_OFF', 
+        lastUpdated: Date.now() 
+      },
     ];
 
     const savedPumps = await Pump.insertMany(pumps);

@@ -119,3 +119,51 @@ exports.getPumpHistory = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+exports.getAllPumps = async (req, res) => {
+  try {
+    const pumps = await Pump.find();
+    res.status(200).json(pumps);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
+exports.getPumpById = async (req, res) => {
+  try {
+    const pumpId = req.params.pumpId;
+    const pump = await Pump.findOne({ pumpId });
+    if (!pump) {
+      return res.status(404).json({ message: 'Pump not found' });
+    }
+    res.status(200).json(pump);
+  }
+  catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
+exports.setRelayPin = async (req, res) => {
+  try {
+    const { relayPin } = req.body;
+    const pumpId = req.params.pumpId;
+
+    const pump = await Pump.findOne({
+      pumpId
+    });
+
+    if (!pump) {
+      return res.status(404).json({
+        message: 'Pump not found'
+      });
+    }
+
+    pump.relayPin = relayPin;
+    await pump.save();
+
+    res.status(200).json({ message: `Edited relay pin to ${relayPin} for pump ${pumpId}` });
+  }
+  catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}

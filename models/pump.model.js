@@ -6,10 +6,6 @@ const PumpSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
-  name: {
-    type: String, // Nama pompa (contoh: "Pompa 1")
-    required: true,
-  },
   associatedDevice: {
     type: String,
     ref: 'Device',
@@ -17,7 +13,7 @@ const PumpSchema = new mongoose.Schema({
   },
   relayPin: {
     type: Number, // Pin relay di perangkat PLC yang mengontrol pompa ini
-    required: true,
+    default: null
   },
   status: {
     type: String, // Status pompa: ON atau OFF

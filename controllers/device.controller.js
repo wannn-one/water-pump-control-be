@@ -1,5 +1,7 @@
 const Device = require('../models/device.model');
 const DeviceLog = require('../models/devicelog.model');
+const Pump = require('../models/pump.model');
+const WaterLevel = require('../models/sensor.model');
 
 // Get all devices
 exports.getDevices = async (req, res) => {
@@ -25,7 +27,7 @@ exports.getDeviceById = async (req, res) => {
 // Create a new device
 exports.createDevice = async (req, res) => {
   try {
-    const { deviceId, name, type, location, status } = req.body;
+    const { deviceId, type, location, status } = req.body;
 
     // Check if deviceId already exists
     const existingDevice = await Device.findOne({ deviceId });
@@ -33,11 +35,31 @@ exports.createDevice = async (req, res) => {
       return res.status(400).json({ message: 'Device with this ID already exists' });
     }
 
-    const newDevice = new Device({ deviceId, name, type, location, status });
+    const newDevice = new Device({ deviceId, type, location, status });
     const savedDevice = await newDevice.save();
 
-    // Log the creation of the device
-    // Ensure the deviceId stored in DeviceLog is the ObjectId (savedDevice._id)
+    // if type is 'ESP_PLC' then create a new pump, else if type is 'ESP_WATERLEVEL' then create a new water level sensor, else return error
+    if (type === 'ESP_PLC') {
+      // Create a new pump
+      await Pump.create({
+        pumpId: 'PUMP-' + deviceId,
+        associatedDevice: deviceId,
+        status: 'OFF',
+        lastAction: 'TURN_OFF',
+        lastUpdated: Date.now(),
+      });
+    } else if (type === 'ESP_WATERLEVEL') {
+      // Create a new water level sensor
+      await WaterLevel.create({
+        sensorId: 'SENSOR-' + deviceId,
+        associatedDevice: deviceId,
+        status: 'NORMAL',
+        lastUpdated: Date.now(),
+      });
+    } else {
+      return res.status(400).json({ message: 'Invalid device type' });
+    }
+
     await DeviceLog.create({
       deviceId: savedDevice.deviceId,
       action: 'CREATE',
