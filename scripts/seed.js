@@ -58,8 +58,8 @@ async function seedDatabase() {
     // Seed Sensors (misalnya terkait dengan device tertentu)
     const sensors = [
       { 
-        sensorId: 'SENSOR-' + savedDevices[5].deviceId,
-        associatedDevice: savedDevices[5].deviceId, 
+        sensorId: 'SENSOR-' + savedDevices[4].deviceId,
+        associatedDevice: savedDevices[4].deviceId, 
         status: 'ON' 
       },
     ];
