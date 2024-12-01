@@ -20,8 +20,36 @@ async function seedDatabase() {
 
     // Seed Devices
     const devices = [
-      { deviceId: 'ESP32-01', type: 'ESP_PLC', location: 'Room 1', status: 'INACTIVE' },
-      { deviceId: 'ESP32-02', type: 'ESP_WATERLEVEL', location: 'Room 2', status: 'ACTIVE' },
+      { 
+        deviceId: 'ESP32-01', 
+        type: 'ESP_PLC', 
+        location: 'P-001', 
+        status: 'ACTIVE' 
+      },
+      { 
+        deviceId: 'ESP32-02', 
+        type: 'ESP_PLC', 
+        location: 'P-002', 
+        status: 'ACTIVE' 
+      },
+      {
+        deviceId: 'ESP32-03',
+        type: 'ESP_PLC',
+        location: 'P-003',
+        status: 'ACTIVE'
+      },
+      {
+        deviceId: 'ESP32-04',
+        type: 'ESP_PLC',
+        location: 'P-004',
+        status: 'ACTIVE'
+      },
+      {
+        deviceId: 'ESP32-05',
+        type: 'ESP_WATERLEVEL',
+        location: 'TK-001',
+        status: 'ACTIVE'
+      },
     ];
 
     const savedDevices = await Device.insertMany(devices);
@@ -30,8 +58,8 @@ async function seedDatabase() {
     // Seed Sensors (misalnya terkait dengan device tertentu)
     const sensors = [
       { 
-        sensorId: 'SENSOR-' + savedDevices[1].deviceId,
-        associatedDevice: savedDevices[1].deviceId, 
+        sensorId: 'SENSOR-' + savedDevices[5].deviceId,
+        associatedDevice: savedDevices[5].deviceId, 
         status: 'ON' 
       },
     ];
@@ -50,6 +78,33 @@ async function seedDatabase() {
         lastAction: 'TURN_OFF', 
         lastUpdated: Date.now() 
       },
+      { 
+        pumpId: 'PUMP-' + savedDevices[1].deviceId, 
+        associatedDevice: savedDevices[1].deviceId, 
+        relayPin: 2, 
+        status: 'OFF', 
+        controlMode: 'MANUAL', 
+        lastAction: 'TURN_OFF', 
+        lastUpdated: Date.now() 
+      },
+      {
+        pumpId: 'PUMP-' + savedDevices[2].deviceId,
+        associatedDevice: savedDevices[2].deviceId,
+        relayPin: 3,
+        status: 'OFF',
+        controlMode: 'MANUAL',
+        lastAction: 'TURN_OFF',
+        lastUpdated: Date.now()
+      },
+      {
+        pumpId: 'PUMP-' + savedDevices[3].deviceId,
+        associatedDevice: savedDevices[3].deviceId,
+        relayPin: 4,
+        status: 'OFF',
+        controlMode: 'MANUAL',
+        lastAction: 'TURN_OFF',
+        lastUpdated: Date.now()
+      }
     ];
 
     const savedPumps = await Pump.insertMany(pumps);
