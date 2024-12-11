@@ -3,6 +3,7 @@ const Device = require('../models/device.model');
 const Sensor = require('../models/sensor.model');
 const Pump = require('../models/pump.model');
 const DeviceLog = require('../models/devicelog.model');
+const SensorHistory = require('../models/sensorhistory.model');
 require('dotenv').config();
 
 async function seedDatabase() {
@@ -16,6 +17,7 @@ async function seedDatabase() {
     await Sensor.deleteMany({});
     await Pump.deleteMany({});
     await DeviceLog.deleteMany({});
+    await SensorHistory.deleteMany({});
     console.log('Existing data cleared.');
 
     // Seed Devices
