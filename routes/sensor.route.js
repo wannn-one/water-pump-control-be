@@ -16,4 +16,9 @@ router.get('/', sensorController.getAllSensors); // Get all sensors
 // Endpoint untuk mengambil sensor berdasarkan ID
 router.get('/:sensorId', sensorController.getSensorById); // Get sensor by ID
 
+router.get('/history/all', sensorController.getAllSensorsHistory); // Get all sensors history
+
+// Download sensor history as CSV
+router.get('/history/download/csv', sensorController.downloadAllSensorHistoriesAsCSV);
+
 module.exports = router;

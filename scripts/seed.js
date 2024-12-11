@@ -11,7 +11,7 @@ async function seedDatabase() {
     await mongoose.connect(process.env.MONGODB_URL);
     console.log('Connected to MongoDB...');
 
-    // Clear existing data (opsional, jika ingin reset data)
+    // Clear existing data
     await Device.deleteMany({});
     await Sensor.deleteMany({});
     await Pump.deleteMany({});
@@ -55,7 +55,7 @@ async function seedDatabase() {
     const savedDevices = await Device.insertMany(devices);
     console.log(`Seeded ${savedDevices.length} devices.`);
 
-    // Seed Sensors (misalnya terkait dengan device tertentu)
+    // Seed Sensors
     const sensors = [
       { 
         sensorId: 'SENSOR-' + savedDevices[4].deviceId,
@@ -67,7 +67,7 @@ async function seedDatabase() {
     const savedSensors = await Sensor.insertMany(sensors);
     console.log(`Seeded ${savedSensors.length} sensors.`);
 
-    // Seed Pumps (misalnya terkait dengan device tertentu)
+    // Seed Pumps 
     const pumps = [
       { 
         pumpId: 'PUMP-' + savedDevices[0].deviceId, 
@@ -112,10 +112,30 @@ async function seedDatabase() {
 
     // Seed DeviceLogs
     const logs = [
-      { deviceId: savedDevices[0].deviceId, action: 'TURN_ON', status: 'ON', timestamp: Date.now() },
-      { deviceId: savedDevices[1].deviceId, action: 'TURN_OFF', status: 'OFF', timestamp: Date.now() },
-      { deviceId: savedDevices[0].deviceId, action: 'TURN_OFF', status: 'OFF', timestamp: Date.now() },
-      { deviceId: savedDevices[1].deviceId, action: 'TURN_ON', status: 'ON', timestamp: Date.now() },
+      { 
+        deviceId: savedDevices[0].deviceId, 
+        action: 'TURN_ON', 
+        status: 'ON', 
+        timestamp: Date.now() 
+      },
+      { 
+        deviceId: savedDevices[1].deviceId, 
+        action: 'TURN_OFF', 
+        status: 'OFF', 
+        timestamp: Date.now() 
+      },
+      { 
+        deviceId: savedDevices[0].deviceId, 
+        action: 'TURN_OFF', 
+        status: 'OFF', 
+        timestamp: Date.now() 
+      },
+      { 
+        deviceId: savedDevices[1].deviceId, 
+        action: 'TURN_ON', 
+        status: 'ON', 
+        timestamp: Date.now() 
+      },
     ];
 
     const savedLogs = await DeviceLog.insertMany(logs);
