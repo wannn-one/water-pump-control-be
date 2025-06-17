@@ -1,0 +1,41 @@
+{
+  "name": "water-monitoring-be-remake",
+  "version": "1.0.0",
+  "description": "Water Pump Control Backend is a RESTful API that allows users to monitor & control water pumps. It is built using MongoDB Atlas, Express, Node.js and MQTT for communication with the IoT devices (In this case ESP32).",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js",
+    "seed": "node scripts/seed.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wannn-one/water-pump-control-be.git"
+  },
+  "author": "Ikhwanul Abiyu",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/wannn-one/water-pump-control-be/issues"
+  },
+  "keywords": [
+    "IoT",
+    "Water Pump Control",
+    "Backend",
+    "Node.js",
+    "Express",
+    "MongoDB",
+    "MQTT"
+  ],
+  "homepage": "https://github.com/wannn-one/water-pump-control-be#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "csv-writer": "^1.6.0",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "moment": "^2.30.1",
+    "mongodb": "^6.17.0",
+    "mongoose": "^8.15.2",
+    "mqtt": "^5.13.1",
+    "nodemon": "^3.1.10"
+  }
+}
