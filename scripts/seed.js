@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const SystemStatus = require('../models/systemStatus.model'); 
+const LevelHistory = require('../models/levelHistory.model');
 require('dotenv').config();
 
 async function seedDatabase() {
@@ -16,12 +17,15 @@ async function seedDatabase() {
     await SystemStatus.deleteMany({});
     console.log('Old data in SystemStatus collection has been deleted.');
 
+    await LevelHistory.deleteMany({});
+    console.log('Old data in LevelHistory collection has been deleted.');
+
     const initialStatus = {
       systemId: 'ESP_CONTROLLER',
       systemCondition: 'NORMAL 1',
       tank: {
         tankId: 'TK-001',
-        currentLevelCm: 10,
+        currentLevelCm: 0,
         sensorStatus: 'WORKING'
       },
       pumps: [
