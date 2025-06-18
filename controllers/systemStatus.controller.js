@@ -87,21 +87,25 @@ const updateStatusFromDevice = async (req, res) => {
 
         // 2. Cari dokumen berdasarkan systemId dan perbarui dengan data baru
         // Opsi `{ new: true, upsert: true }` sangat penting di sini.
-        const updatedStatus = await SystemStatus.findOneAndUpdate(
-            { systemId: 'ESP_CONTROLLER' }, // Filter: cari dokumen ini
-            systemData,                         // Data baru untuk di-update
-            {
-                new: true,           // Kembalikan dokumen yang sudah ter-update
-                upsert: true,        // Jika dokumen tidak ada, buat dokumen baru
-                runValidators: true  // Jalankan validasi schema (misal: enum)
+        const updatePayload = {
+            $set: {
+                ...systemData, // Ambil semua data dari ESP (systemCondition, tank, pumps)
+                lastUpdate: new Date() // TINDAS field lastUpdate dengan waktu server saat ini
             }
+        };
+
+        const updatedStatus = await SystemStatus.findOneAndUpdate(
+            { systemId: 'ESP_CONTROLLER_01' }, // Filter
+            updatePayload,                      // Gunakan payload yang sudah diperbarui
+            { new: true, upsert: true, runValidators: true } // Opsi
         );
 
         if (updatedStatus && updatedStatus.tank && updatedStatus.tank.currentLevelCm !== undefined) {
             await LevelHistory.create({
-                timestamp: updatedStatus.lastUpdate, // Gunakan waktu update yang sama
+                timestamp: updatedStatus.lastUpdate, 
                 level: updatedStatus.tank.currentLevelCm,
-                systemId: updatedStatus.systemId
+                systemId: updatedStatus.systemId,
+                tankId: updatedStatus.tank.tankId
             });
         }
 
