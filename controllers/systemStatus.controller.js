@@ -95,7 +95,7 @@ const updateStatusFromDevice = async (req, res) => {
         };
 
         const updatedStatus = await SystemStatus.findOneAndUpdate(
-            { systemId: 'ESP_CONTROLLER_01' }, // Filter
+            { systemId: 'ESP_CONTROLLER' }, // Filter
             updatePayload,                      // Gunakan payload yang sudah diperbarui
             { new: true, upsert: true, runValidators: true } // Opsi
         );
