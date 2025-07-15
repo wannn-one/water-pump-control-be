@@ -1,4 +1,8 @@
 const LevelHistory = require('../models/levelHistory.model');
+const { convertToCsv } = require('../utils/csvUtils');
+const path = require('path');
+const fs = require('fs');
+const moment = require('moment');
 
 /**
  * @desc    Mengambil data histori pembacaan level air.
@@ -67,8 +71,70 @@ const getPaginatedHistory = async (req, res) => {
   }
 };
 
+/**
+ * @desc    Mengambil data histori untuk diexport ke excel dalam format csv
+ * @route   GET /history/download/csv
+ */
+const exportHistoryToExcel = async (req, res) => {
+  try {
+    // 1. Ambil semua data histori dari database, urutkan dari yang terlama
+    const allHistory = await LevelHistory.find()
+      .sort({ timestamp: 1 }); // Urutkan dari terlama ke terbaru untuk export
+
+    // 2. Cek jika tidak ada data
+    if (allHistory.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: 'Tidak ada data histori untuk diekspor.'
+      });
+    }
+
+    // 3. Buat nama file dengan timestamp saat ini
+    const timestamp = moment().format('YYYY-MM-DD_HH-mm-ss');
+    const fileName = `level-history-${timestamp}.csv`;
+    const filePath = path.join(__dirname, '..', 'temp', fileName);
+
+    // 4. Pastikan direktori temp ada
+    const tempDir = path.dirname(filePath);
+    if (!fs.existsSync(tempDir)) {
+      fs.mkdirSync(tempDir, { recursive: true });
+    }
+
+    // 5. Konversi data ke CSV
+    await convertToCsv(allHistory, filePath);
+
+    // 6. Set header untuk download file
+    res.setHeader('Content-Type', 'text/csv');
+    res.setHeader('Content-Disposition', `attachment; filename="${fileName}"`);
+
+    // 7. Stream file ke response
+    const fileStream = fs.createReadStream(filePath);
+    
+    fileStream.pipe(res);
+
+    // 8. Hapus file temporary setelah selesai dikirim
+    fileStream.on('end', () => {
+      fs.unlink(filePath, (err) => {
+        if (err) {
+          console.error('Error deleting temporary file:', err);
+        } else {
+          console.log(`Temporary file ${fileName} deleted successfully`);
+        }
+      });
+    });
+
+  } catch (error) {
+    console.error('Error in exportHistoryToExcel:', error);
+    res.status(500).json({ 
+      success: false, 
+      message: 'Terjadi kesalahan saat mengekspor data ke CSV.', 
+      error: error.message 
+    });
+  }
+};
 
 module.exports = {
   getHistoryData,
-  getPaginatedHistory
+  getPaginatedHistory,
+  exportHistoryToExcel
 };
