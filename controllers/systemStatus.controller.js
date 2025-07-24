@@ -1,6 +1,7 @@
 const SystemStatus = require('../models/systemStatus.model');
 const LevelHistory = require('../models/levelHistory.model');
 const client = require('../config/mqtt');
+const ActionLog = require('../models/actionLog.model');
 
 const MQTT_COMMAND_TOPIC = 'system/ESP_CONTROLLER/command';
 
@@ -52,6 +53,12 @@ const setSystemModeViaMqtt = async (req, res) => {
         if (!['AUTO', 'MANUAL'].includes(mode)) {
             return res.status(400).json({ success: false, message: 'Invalid mode. Use "AUTO" or "MANUAL".' });
         }
+
+        await ActionLog.create({
+            source: 'USER_DASHBOARD',
+            actionType: 'SYSTEM_MODE_CHANGE',
+            details: { newMode: mode }
+        });
 
         const payload = JSON.stringify({
             command: 'set_mode',

@@ -1,4 +1,5 @@
 const SystemStatus = require('../models/systemStatus.model');
+const ActionLog = require('../models/actionLog.model');
 const client = require('../config/mqtt');
 require('dotenv').config();
 
@@ -38,6 +39,13 @@ const setPumpStatusViaMqtt = async (req, res) => {
         if (!['ON', 'OFF'].includes(status)) {
             return res.status(400).json({ success: false, message: 'Invalid status.' });
         }
+
+        // Buat log aksi
+        const log = new ActionLog({
+            source: 'USER_DASHBOARD',
+            actionType: 'PUMP_STATUS_CHANGE',
+            details: { pumpId, status }
+        });
 
         // Buat payload perintah dalam format JSON
         const payload = JSON.stringify({
