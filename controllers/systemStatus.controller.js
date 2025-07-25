@@ -54,12 +54,6 @@ const setSystemModeViaMqtt = async (req, res) => {
             return res.status(400).json({ success: false, message: 'Invalid mode. Use "AUTO" or "MANUAL".' });
         }
 
-        await ActionLog.create({
-            source: 'USER_DASHBOARD',
-            actionType: 'SYSTEM_MODE_CHANGE',
-            details: { newMode: mode }
-        });
-
         const payload = JSON.stringify({
             command: 'set_mode',
             mode: mode
@@ -92,8 +86,10 @@ const updateStatusFromDevice = async (req, res) => {
             return res.status(400).json({ success: false, message: 'Request body tidak boleh kosong.' });
         }
 
-        // 2. Cari dokumen berdasarkan systemId dan perbarui dengan data baru
-        // Opsi `{ new: true, upsert: true }` sangat penting di sini.
+        // 2. Ambil status lama untuk perbandingan
+        const oldStatus = await SystemStatus.findOne({ systemId: 'ESP_CONTROLLER' });
+
+        // 3. Cari dokumen berdasarkan systemId dan perbarui dengan data baru
         const updatePayload = {
             $set: {
                 ...systemData, // Ambil semua data dari ESP (systemCondition, tank, pumps)
@@ -107,6 +103,37 @@ const updateStatusFromDevice = async (req, res) => {
             { new: true, upsert: true, runValidators: true } // Opsi
         );
 
+        // 4. Log perubahan mode sistem jika ada
+        if (oldStatus && systemData.mode && oldStatus.mode !== systemData.mode) {
+            await ActionLog.create({
+                source: 'SYSTEM_AUTO', // Atau 'USER_DASHBOARD' jika dari dashboard
+                actionType: 'SYSTEM_MODE_CHANGE',
+                details: { 
+                    oldMode: oldStatus.mode,
+                    newMode: systemData.mode 
+                }
+            });
+        }
+
+        // 5. Log perubahan status pompa jika ada
+        if (oldStatus && systemData.pumps && oldStatus.pumps) {
+            for (const newPump of systemData.pumps) {
+                const oldPump = oldStatus.pumps.find(p => p.pumpId === newPump.pumpId);
+                if (oldPump && oldPump.status !== newPump.status) {
+                    await ActionLog.create({
+                        source: 'SYSTEM_AUTO',
+                        actionType: 'PUMP_STATUS_CHANGE',
+                        details: { 
+                            pumpId: newPump.pumpId,
+                            oldStatus: oldPump.status,
+                            status: newPump.status 
+                        }
+                    });
+                }
+            }
+        }
+
+        // 6. Simpan level history
         if (updatedStatus && updatedStatus.tank && updatedStatus.tank.currentLevelCm !== undefined) {
             await LevelHistory.create({
                 timestamp: updatedStatus.lastUpdate, 
@@ -116,7 +143,7 @@ const updateStatusFromDevice = async (req, res) => {
             });
         }
 
-        // 3. Kirim response berhasil
+        // 7. Kirim response berhasil
         res.status(200).json({
             success: true,
             message: 'Status sistem berhasil diperbarui dari device.',
